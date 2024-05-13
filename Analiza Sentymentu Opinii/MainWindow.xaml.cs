@@ -1,5 +1,9 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,13 +29,26 @@ namespace Analiza_Sentymentu_Opinii
             InitializeComponent();
         }
 
-        private void addButton_Click(object sender, RoutedEventArgs e)
+        private void searchFile_Click(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(string.Empty))
-            {
-                MessageBox.Show("result" + "$result"); 
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
 
-                
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                file_TextBox.Text = selectedFileName;
+
+                try
+                {
+                    string fileContent = File.ReadAllText(selectedFileName);
+                    MessageBox.Show(fileContent, "Содержимое файла");
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("Ошибка чтения файла: " + ex.Message);
+                }
             }
         }
     }
